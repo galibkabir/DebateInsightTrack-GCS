@@ -1,0 +1,41 @@
+class DebatePerformanceTracker:
+    def __init__(self):
+        self.data = {}  # Dictionary to store performance data
+    
+    def add_performance(self, date, team, score):
+        if date not in self.data:
+            self.data[date] = {}
+        if team not in self.data[date]:
+            self.data[date][team] = []
+        self.data[date][team].append(score)
+    
+    def get_average_score(self, team, date_range=None):
+        if date_range is None:
+            date_range = self.data.keys()
+        total_scores = 0
+        count = 0
+        for date in date_range:
+            if date in self.data and team in self.data[date]:
+                total_scores += sum(self.data[date][team])
+                count += len(self.data[date][team])
+        if count == 0:
+            return 0
+        return total_scores / count
+
+# Example usage
+tracker = DebatePerformanceTracker()
+
+# Adding performance data
+tracker.add_performance("2023-01-15", "Team A", 90)
+tracker.add_performance("2023-01-15", "Team B", 85)
+tracker.add_performance("2023-02-10", "Team A", 88)
+tracker.add_performance("2023-02-10", "Team B", 92)
+
+# Getting average score for Team A
+average_score_team_a = tracker.get_average_score("Team A")
+print("Average score for Team A:", average_score_team_a)
+
+# Getting average score for Team B in a specific date range
+date_range = ["2023-01-15", "2023-02-10"]
+average_score_team_b_range = tracker.get_average_score("Team B", date_range)
+print("Average score for Team B in the specified date range:", average_score_team_b_range)
